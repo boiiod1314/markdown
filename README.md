@@ -3,7 +3,9 @@
 安装步骤
 
 >git clone git@github.com:boiiod1314/markdown.git
+
 >mvn clean
+
 >mvn package -DskipTests -Ppro
 
 打包成功后，在target目录会生产 doc-1.0-assembly.tar.gz 文件
@@ -18,3 +20,4 @@
 
 编辑地址： http://ip:9999/editlist.html
 
+查看日志： tail -f doc-1.0/log/application.out
