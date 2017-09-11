@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${filename}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="/css/editormd.css" />
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/editormd.js"></script>
+    <script type="text/javascript">
+        var testEditor;
+
+        $(function() {
+            testEditor = editormd("test-editormd", {
+                width   : "90%",
+                height  : 640,
+                syncScrolling : "single",
+                path    : "/js/lib/",
+                toolbarIcons: [
+                    "undo", "redo", "|",
+                    "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|",
+                    "h1", "h2", "h3", "h4", "h5", "h6", "|",
+                    "list-ul", "list-ol", "hr", "|",
+                    "code", "preformatted-text", "code-block", "table", "datetime", "html-entities", "pagebreak", "|",
+                    "goto-line", "watch", "preview", "fullscreen", "clear", "search", "|", "save"
+                ],toolbarIconTexts: {
+                    save: '<span style="font-size: 14px; font-weight: 700">保存</span>'
+                },
+                toolbarHandlers: {
+                    save: function () {
+                        var filename = $("title").html();
+                        var name=prompt("输入文档名称，同名会覆盖旧文档",filename);
+                        name = $.trim(name);
+                        if(name){
+                            $.post("/save.html",{f:name,content:testEditor.getMarkdown()},function (r) {
+                               if(r=="fail"){
+                                    alert("保存失败");
+                               } else if(r=="success"){
+                                   alert("保存成功");
+                                   window.location.href="/";
+                               }
+                            });
+                        }
+
+                    }
+                },
+            });
+            testEditor.fullscreen();
+        });
+    </script>
+</head>
+<body>
+
+<div id="test-editormd">
+    <textarea style="display:none;" th:text="${content}"></textarea>
+</div>
+
+
+</body>
+</html>
